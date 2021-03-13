@@ -1,0 +1,27 @@
+{
+  "cli_base": {
+    "modifiable": true,
+    "mac": "a6:4d:e9:41:55:82",
+    "ip": "172.16.2.3"
+  },
+  "gui_base": {
+    "modifiable": false,
+    "mac": "54:3b:a3:63:82:54",
+    "ip": "172.16.2.4"
+  },
+  "envoy": {
+    "modifiable": false,
+    "mac": "82:cc:54:13:76:18",
+    "ip": "172.16.2.5"
+  },
+  "zap": {
+    "modifiable": false,
+    "mac": "dc:2e:4f:a1:36:97",
+    "ip": "172.16.2.6"
+  },
+  "serve": {
+    "modifiable": false,
+    "mac": "9a:d2:69:71:b3:6f",
+    "ip": "172.16.2.7"
+  }
+}

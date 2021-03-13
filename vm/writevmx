@@ -1,0 +1,46 @@
+#!/usr/bin/python3
+
+import os, json
+
+#just open the each vm's .vmx file and update it with key value
+def vmxReaderWriter(i, js):
+    dick = {}
+    with open(f"/home/pkv/bin/vmachines/{i}/vm.vmx", "r+", ) as f:
+        #here read only
+        lines = f.read().split("\n")
+        for line in lines:
+            if len(line.strip()) == 0:
+                continue
+            key, value = line.split("=", 1)
+            dick[key.strip()] = value.strip()
+
+        print(dick["ethernet0.address"])
+        print(dick["displayName"])
+        dick.update(js)
+
+        #her write only
+        lines = []
+        for key, value in dick.items():
+            lines.append(key + " = " + value)
+        print(len(lines), f"inserted in {i}")
+        f.seek(0)
+        f.write("\n".join(lines))
+        f.truncate()
+
+
+
+def updateDick(i, jsonInfo):
+    return {
+        "ethernet0.address": jsonInfo["mac"],
+        "displayName": i
+    }
+
+
+jsonInfo = json.loads(open("/home/pkv/sys/p/src/vm/vmconf.json").read())
+print("Dir additional: ", set(os.listdir("/home/pkv/bin/vmachines")) - set(jsonInfo.keys()))
+print("Dir missing: ", set(jsonInfo.keys()) - set(os.listdir("/home/pkv/bin/vmachines")))
+for i in os.listdir("/home/pkv/bin/vmachines"):
+    #check only if modifiable
+    if jsonInfo.get(i,{}).get("modifiable",False):
+        js = updateDick(i, jsonInfo[i])
+        vmxReaderWriter(i, js)

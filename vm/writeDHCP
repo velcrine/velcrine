@@ -1,0 +1,19 @@
+#!/usr/bin/python3
+
+# write dhcp conf file
+import json
+jsonInfo = json.loads(open("/home/pkv/sys/p/src/vm/vmconf.json").read())
+lines=[]
+
+with open("/etc/vmware/vmnet12/dhcpd/dhcpd.conf","r+") as f:
+#with open("./dhcpd.conf","r+") as f:
+    for i in f.read().split("\n"):
+        if 'End of "DO NOT MODIFY SECTION"' in i:
+            lines.append(i)
+            break
+        lines.append(i)
+    for key,value in jsonInfo.items():
+        lines.append(f"host {key} {{\n\thardware ethernet {value['mac']};\n\tfixed-address {value['ip']};\n}}\n")
+    f.seek(0)
+    f.write("\n".join(lines))
+    f.truncate()
